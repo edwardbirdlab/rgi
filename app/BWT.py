@@ -14,7 +14,7 @@ class BWT(object):
 	Class to align metagenomic reads to CARD and wildCARD reference using bwa or bowtie2 and
 	provide reports (gene, allele report and read level reports).
 	"""
-	def __init__(self, aligner, include_wildcard, include_baits, read_one, read_two, threads, output_file, debug, clean, local_database, mapq, mapped, coverage, include_other_models):
+	def __init__(self, aligner, include_wildcard, include_baits, read_one, read_two, threads, output_file, debug, clean, local_database, mapq, mapped, coverage, include_other_models, kma_ont):
 		"""Creates BWT object."""
 		self.aligner = aligner
 		self.read_one = read_one
@@ -32,6 +32,11 @@ class BWT(object):
 		self.mapped = mapped
 		self.coverage = coverage
 		self.include_other_models = include_other_models
+
+		if self.aligner == 'kma' and self.read_two is None:
+			self.kma_ont = kma_ont
+		else:
+			self.kma_ont = False
 
 		self.debug = debug
 		if self.debug:
@@ -236,13 +241,17 @@ class BWT(object):
 
 		logger.info("align reads -ipe {} {} to {}".format(self.read_one, self.read_two, reference_genome))
 
-		cmd = "kma -mem_mode -ex_mode -1t1 -vcf -int {read_one} -t {threads} -t_db {index_directory} -o {output_sam_file}.temp -sam > {output_sam_file}".format(
+		bcnano_command = " -bcNano" if self.kma_ont else ""
+
+		cmd = "kma -mem_mode -ex_mode -1t1 -vcf -int {read_one} -t {threads} -t_db {index_directory} {ont_command} -o {output_sam_file}.temp -sam > {output_sam_file}".format(
 			threads=self.threads,
 			index_directory=index_directory,
 			read_one=self.read_one,
 			read_two=self.read_two,
-			output_sam_file=output_sam_file
+			output_sam_file=output_sam_file,
+			ont_command=bcnano_command
 		)
+
 		os.system(cmd)
 
 	def align_bowtie2_unpaired(self, reference_genome, index_directory, output_sam_file):

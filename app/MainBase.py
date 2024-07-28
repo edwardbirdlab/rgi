@@ -293,6 +293,7 @@ class MainBase(object):
         parser.add_argument('--mapq', dest="mapq", help="filter reads based on MAPQ score (default=False)")
         parser.add_argument('--mapped', dest="mapped", help="filter reads based on mapped reads (default=False)")
         parser.add_argument('--coverage', dest="coverage", help="filter reads based on coverage of reference sequence")
+        parser.add_argument('--kma_ont', dest="kma_ont", action="store_true", help="Run KMA alignment with Oxford Nanopore data (default=False)")
 
         return parser
 
@@ -312,6 +313,7 @@ class MainBase(object):
             args.mapped,
             args.coverage,
             args.include_other_models
+            args.kma_ont
         )
         obj.run()
 
