@@ -312,7 +312,7 @@ class MainBase(object):
             args.mapq,
             args.mapped,
             args.coverage,
-            args.include_other_models
+            args.include_other_models,
             args.kma_ont
         )
         obj.run()
