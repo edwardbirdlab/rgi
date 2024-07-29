@@ -6,7 +6,7 @@ from app.MainBase import MainBase
 checks that heatmaps are created
 """
 
-inputs = "inputs/heatmap_inputs/"
+inputs = "tests/inputs/heatmap_inputs/"
 outputs = "outputs/"
 working_directory = os.getcwd()
 input_directory = os.path.join(working_directory, inputs)
