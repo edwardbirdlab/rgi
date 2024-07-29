@@ -33,10 +33,15 @@ class BWT(object):
 		self.coverage = coverage
 		self.include_other_models = include_other_models
 
-		if self.aligner == 'kma' and self.read_two is None:
-			self.kma_ont = kma_ont
-		else:
-			self.kma_ont = False
+		try:
+			if self.aligner == 'kma' and self.read_two is None:
+				self.kma_ont = kma_ont
+			else:
+				self.kma_ont = False
+				raise Exception('--kma_ont can only be used with aligner=kma with single ended data. Turning off KMA ONT optomizations')
+		except Exception as e:
+			print(f"Arguments Incompatible: {e}")
+
 
 		self.debug = debug
 		if self.debug:
@@ -241,15 +246,18 @@ class BWT(object):
 
 		logger.info("align reads -ipe {} {} to {}".format(self.read_one, self.read_two, reference_genome))
 
-		bcnano_command = " -bcNano" if self.kma_ont else ""
+		options = ""
 
-		cmd = "kma -mem_mode -ex_mode -1t1 -vcf -int {read_one} -t {threads} -t_db {index_directory} {ont_command} -o {output_sam_file}.temp -sam > {output_sam_file}".format(
+		if self.kma_ont:
+			options += "-bcNano"
+
+		cmd = "kma -mem_mode -ex_mode -1t1 -vcf -int {read_one} -t {threads} -t_db {index_directory} {options} -o {output_sam_file}.temp -sam > {output_sam_file}".format(
 			threads=self.threads,
 			index_directory=index_directory,
 			read_one=self.read_one,
 			read_two=self.read_two,
 			output_sam_file=output_sam_file,
-			ont_command=bcnano_command
+			options=options
 		)
 
 		os.system(cmd)
