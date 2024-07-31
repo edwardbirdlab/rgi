@@ -15,6 +15,21 @@
     :scale: 100%
     :target: http://bioconda.github.io/recipes/rgi/README.html
 
+=================================================
+Custom Modification to RGI
+=================================================
+Modification to RGI BWT:
+
+Added the argument --kma_ont. This addes the -Bcnano functionality into KMA to allow for the mapping of error prone long read data (Oxford Nanopore).
+
+
+Addition Minor Changes:
+
+-Created working docker file for easy develpoment.
+
+-Minor changes to depreciated test scripts to get them working again.
+
+
 ====================================
 The Resistance Gene Identifier (RGI)
 ====================================
