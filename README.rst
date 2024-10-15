@@ -29,6 +29,10 @@ Addition Minor Changes:
 
 -Minor changes to depreciated test scripts to get them working again.
 
+Future Changes:
+
+-Include support for customization of base call support ("-bc") for KMA
+
 
 ====================================
 The Resistance Gene Identifier (RGI)
